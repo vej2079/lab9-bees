@@ -39,7 +39,14 @@ public class FlowerField {
      */
     public synchronized void enterField(Worker worker) {
         System.out.println("*FF* " + worker + " enters field");
-        // TODO
+        while (numWorkers >= MAX_WORKERS) {
+            try {
+                this.wait();
+            } catch (InterruptedException ie) {
+                System.out.println(worker.toString() + " was interrupted when entering the flower field");
+            }
+            numWorkers++;
+        }
     }
 
     /**
@@ -56,5 +63,8 @@ public class FlowerField {
     public synchronized void exitField(Worker worker) {
         // TODO
         System.out.println("*FF* " + worker + " leaves field");
+        numWorkers--;
+        this.notify();
+
     }
 }

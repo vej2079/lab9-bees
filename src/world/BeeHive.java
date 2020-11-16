@@ -167,6 +167,15 @@ public class BeeHive {
     public void begin() {
         System.out.println("*BH* Bee hive begins buzzing!");
         // TODO
+        for (Bee bee : bees) {
+            try {
+                //bee.wait();
+                bee.start();
+            } catch(Exception e){
+		        //RIP
+		    }
+		    System.out.println("Entered field: " + bee.toString());
+        }
     }
 
     /**
@@ -187,12 +196,19 @@ public class BeeHive {
      */
     public void end() {
         System.out.println("*BH* Bee hive is becoming inactive!");
-
         // flip the switch
         this.active = false;
-
         // TODO
-
+        for (Bee bee : bees) {
+            try {
+                bee.join();
+                // leave the routine????
+                System.out.println("Exited field: " + bee.toString());
+                // bee.notify();
+            } catch (InterruptedException ie) {
+                System.out.println( "Got interrupted while joining.");
+            }
+        }
         System.out.println("*BH* Bee hive stops buzzing!");
     }
 
@@ -254,5 +270,12 @@ public class BeeHive {
     public synchronized void deposit(Resource resource, Worker bee) {
         System.out.println("*BH* " + bee + " deposits");
         // TODO
+        if (resource == Resource.NECTAR) {
+            nectar++;
+            nectarGathered++;
+        } else if (resource == Resource.POLLEN) {
+            pollen++;
+            pollenGathered++;
+        }
     }
 }

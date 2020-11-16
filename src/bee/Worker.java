@@ -73,5 +73,17 @@ public class Worker extends Bee {
      */
     public void run() {
         // TODO
+        while (this.beeHive.isActive()) {
+            flowerField.enterField(this);
+            System.out.println("Bee currently running: " + this.toString());
+            try {
+                Thread.sleep(WORKER_SLEEP_TIME_MS);
+            }
+            catch( InterruptedException ex ) {
+                System.out.println("Worker bee interrupted when running!");
+            }
+            flowerField.exitField(this);
+            this.beeHive.deposit(resource, this);
+        }
     }
 }
