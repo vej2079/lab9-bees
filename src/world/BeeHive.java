@@ -55,20 +55,17 @@ public class BeeHive {
         this.bees = new ConcurrentLinkedQueue<>();
         this.perishedBees = new ConcurrentLinkedQueue<>();
         this.nectar = this.pollen = 0;
-
         // create the bees!
+        this.bees.add(Bee.createBee(Role.QUEEN, Resource.NONE, this));
         for (int i=0; i<numNectarWorkers; ++i ) {
             this.bees.add(Bee.createBee(Role.WORKER, Resource.NECTAR, this));
         }
         for (int i=0; i<numPollenWorkers; ++i ) {
             this.bees.add(Bee.createBee(Role.WORKER, Resource.POLLEN, this));
         }
-
-        // TODO create queen and drone bees
         for (int i=0; i<numDrones; ++i ) {
             this.bees.add(Bee.createBee(Role.DRONE, Resource.NONE, this));
         }
-
         this.active = true;
         this.numBorn = this.bees.size();
         this.nectarGathered = this.pollenGathered = 0;
@@ -176,7 +173,7 @@ public class BeeHive {
             } catch(Exception e){
 		        //RIP
 		    }
-		    System.out.println("Entered field: " + bee.toString());
+		    // System.out.println("Entered field: " + bee.toString());
         }
     }
 
@@ -205,7 +202,7 @@ public class BeeHive {
             try {
                 bee.join();
                 // leave the routine????
-                System.out.println("Exited field: " + bee.toString());
+                // System.out.println("Exited field: " + bee.toString());
                 // bee.notify();
             } catch (InterruptedException ie) {
                 System.out.println( "Got interrupted while joining in BeeHive.");

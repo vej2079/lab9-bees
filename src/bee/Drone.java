@@ -47,21 +47,20 @@ public class Drone extends Bee {
      * sleeping.
      */
     public void run() {
-        // TODO
         while (this.beeHive.isActive()) {
             chamber.enterChamber(this);
             // System.out.println("Bee currently running: " + this.toString());
-            if (mated) {
+            if (!mated) {
                 try {
-                    Thread.sleep(1000); // this amount is specified in queen
+                    Thread.sleep(Queen.MATE_TIME_MS);
                 }
                 catch( InterruptedException ex ) {
                     System.out.println("Drone bee interrupted when sleeping!");
                 }
                 beeHive.beePerished(this);
-                System.out.println("*D* " + this.toString() + " as perished!");
+                System.out.println("*D* " + this.toString() + " has perished!");
             } else {
-                // end run
+                this.notify(); // end run?
             }
         }
     }

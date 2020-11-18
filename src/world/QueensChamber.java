@@ -1,5 +1,8 @@
 package world;
 
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 /**
  * The queen's chamber is where the mating ritual between the queen and her
  * drones is conducted.  The drones will enter the chamber in order.
@@ -15,46 +18,56 @@ public class QueensChamber {
 
     private boolean queenReady;
 
-    private bee.Bee currDrone;
+    private bee.Drone currDrone;
+
+    private ConcurrentLinkedQueue<bee.Drone> drones;
 
     public QueensChamber() {
         this.queenReady = false;
         this.currDrone = null;
-
-        // no drones in chamber
-        // should there be a separate drone concurrent queue?
-
+        this.drones = new ConcurrentLinkedQueue<>();
     }
 
-    public synchronized void enterChamber(bee.Drone drone) {
+    public synchronized void enterChamber(bee.Drone drone) { // does this need to be sync?
         System.out.println("*QC* " + drone.toString() + " enters chamber");
-        if (queenReady) {
-            // remove drone from wait list
+        drones.add(drone);
+        if (queenReady && (drones.peek() == drone)) {
             this.currDrone = drone;
+            this.queenReady = false;
+        } else {
+            try {
+                this.wait();
+            } catch (InterruptedException ie) {
+                System.out.println(drone.toString() + " was interrupted when waiting in the chamber line");
+            }
         }
         System.out.println("*QC* " + drone.toString() + " leaves chamber");
     }
 
     public synchronized void summonDrone() {
-        if (queenReady && hasDrone()) {
+        if (hasDrone()) { // && queenReady?
+            // this.queenReady = true; // where does this go?? - set in hasDrone()
             System.out.println("*QC* Queen mates with " + currDrone.toString());
+            this.drones.remove(currDrone);
+            currDrone.setMated();
             this.notifyAll();
         }
     }
 
-    public void dismissDrone() {
+    public synchronized void dismissDrone() {
         if (hasDrone()) {
-            try {
-                currDrone.join();
-            } catch (InterruptedException ie) {
-                System.out.println( "Got interrupted while joining in QC.");
+            // queenReady = true; // - set in hasDrone()
+            this.notifyAll();
+            for (bee.Drone drone : drones) {
+                // drone.notifyAll();
+                drones.remove(drone);
             }
         }
     }
 
     public boolean hasDrone() {
         // change queenReady to false if not
-        boolean ans = currDrone.isAlive(); // this isn't right
+        boolean ans = !drones.isEmpty();
         queenReady = ans;
         return ans;
     }

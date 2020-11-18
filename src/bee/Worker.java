@@ -74,7 +74,7 @@ public class Worker extends Bee {
     public void run() {
         while (this.beeHive.isActive()) {
             flowerField.enterField(this);
-            System.out.println("Bee currently running: " + this.toString());
+            // System.out.println("Bee currently running: " + this.toString());
             try {
                 Thread.sleep(WORKER_SLEEP_TIME_MS);
             }

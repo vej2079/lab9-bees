@@ -95,9 +95,15 @@ public class Queen extends Bee {
                     numCreated++;
                     beeHive.claimResources();
                 }
-                System.out.println("*Q* Queen birthed" + numCreated + " children");
+                System.out.println("*Q* Queen birthed " + numCreated + " children");
             }
             // queen sleeps here??
+            try {
+                Thread.sleep(SLEEP_TIME_MS);
+            }
+            catch( InterruptedException ex ) {
+                System.out.println("Queen bee interrupted when sleeping!");
+            }
             if (!this.beeHive.isActive()) {
                 // dismiss all drones in chamber??
                 queensChamber.dismissDrone();
