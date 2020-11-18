@@ -65,6 +65,9 @@ public class BeeHive {
         }
 
         // TODO create queen and drone bees
+        for (int i=0; i<numDrones; ++i ) {
+            this.bees.add(Bee.createBee(Role.DRONE, Resource.NONE, this));
+        }
 
         this.active = true;
         this.numBorn = this.bees.size();
@@ -166,7 +169,6 @@ public class BeeHive {
      */
     public void begin() {
         System.out.println("*BH* Bee hive begins buzzing!");
-        // TODO
         for (Bee bee : bees) {
             try {
                 //bee.wait();
@@ -206,7 +208,7 @@ public class BeeHive {
                 System.out.println("Exited field: " + bee.toString());
                 // bee.notify();
             } catch (InterruptedException ie) {
-                System.out.println( "Got interrupted while joining.");
+                System.out.println( "Got interrupted while joining in BeeHive.");
             }
         }
         System.out.println("*BH* Bee hive stops buzzing!");
@@ -220,7 +222,7 @@ public class BeeHive {
      * @param bee the bee who perished
      */
     public synchronized void beePerished (Bee bee){
-        // TODO
+        this.perishedBees.add(bee);
     }
 
     /**
@@ -230,7 +232,8 @@ public class BeeHive {
      * @param bee the new bee
      */
     public synchronized void addBee(Bee bee) {
-        // TODO
+        bees.add(bee);
+        numBorn++;
     }
 
     /**
@@ -240,8 +243,7 @@ public class BeeHive {
      * @return do we have enough resources?
      */
     public synchronized boolean hasResources() {
-        // TODO
-        return false;
+         return ((pollen >= 1) && (nectar >= 1));
     }
 
     /**
@@ -251,7 +253,8 @@ public class BeeHive {
      * @rit.pre {@link BeeHive#hasResources()} is true
      */
     public synchronized void claimResources() {
-        // TODO
+        this.pollen--;
+        this.nectar--;
     }
 
     /**
@@ -269,7 +272,6 @@ public class BeeHive {
      */
     public synchronized void deposit(Resource resource, Worker bee) {
         System.out.println("*BH* " + bee + " deposits");
-        // TODO
         if (resource == Resource.NECTAR) {
             nectar++;
             nectarGathered++;

@@ -1,6 +1,8 @@
 package bee;
 
+import util.RandomBee;
 import world.BeeHive;
+import world.QueensChamber;
 
 /**
  * The queen is the master of the bee hive and the only bee that is allowed
@@ -33,6 +35,8 @@ public class Queen extends Bee {
     /** the maximum number of new bees that will be created by one mating session */
     public final static int MAX_NEW_BEES = 4;
 
+    private QueensChamber queensChamber;
+
     /**
      * Create the queen.  She should get the queen's chamber from the bee hive.
      *
@@ -40,6 +44,7 @@ public class Queen extends Bee {
      */
     public Queen(BeeHive beeHive) {
         super(Bee.Role.QUEEN, beeHive);
+        this.queensChamber = beeHive.getQueensChamber();
     }
 
     /**
@@ -65,6 +70,38 @@ public class Queen extends Bee {
      * still waiting in her chamber.
      */
     public void run() {
-        // TODO
+        while (this.beeHive.isActive()) {
+            if (beeHive.hasResources()) {
+                queensChamber.summonDrone();
+                try {
+                    Thread.sleep(MATE_TIME_MS);
+                }
+                catch( InterruptedException ex ) {
+                    System.out.println("Queen bee interrupted when sleeping!");
+                }
+                int newBees = RandomBee.nextInt(MIN_NEW_BEES, MAX_NEW_BEES);
+                int numCreated = 0;
+                while (beeHive.hasResources() && (numCreated < newBees)) {
+                    int beeType = RandomBee.nextInt(1,5);
+                    Bee currentBee;
+                    if (beeType == 1) {
+                        currentBee = Bee.createBee(Role.WORKER, Worker.Resource.NECTAR, beeHive);
+                    } else if (beeType == 2) {
+                        currentBee = Bee.createBee(Role.WORKER, Worker.Resource.POLLEN, beeHive);
+                    } else {
+                        currentBee = Bee.createBee(Role.DRONE, Worker.Resource.NONE, beeHive);
+                    }
+                    beeHive.addBee(currentBee);
+                    numCreated++;
+                    beeHive.claimResources();
+                }
+                System.out.println("*Q* Queen birthed" + numCreated + " children");
+            }
+            // queen sleeps here??
+            if (!this.beeHive.isActive()) {
+                // dismiss all drones in chamber??
+                queensChamber.dismissDrone();
+            }
+        }
     }
 }

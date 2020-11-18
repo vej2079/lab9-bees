@@ -61,10 +61,8 @@ public class FlowerField {
      * @param worker the worker bee leaving the field
      */
     public synchronized void exitField(Worker worker) {
-        // TODO
         System.out.println("*FF* " + worker + " leaves field");
         numWorkers--;
         this.notify();
-
     }
 }
