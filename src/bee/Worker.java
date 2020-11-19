@@ -12,7 +12,7 @@ import world.FlowerField;
  * before heading out to the fields again.
  *
  * @author Sean Strout @ RIT CS
- * @author YOUR NAME HERE
+ * @author Victoria Jones
  */
 public class Worker extends Bee {
     /**
@@ -78,7 +78,7 @@ public class Worker extends Bee {
             try {
                 Thread.sleep(WORKER_SLEEP_TIME_MS);
             }
-            catch( InterruptedException ex ) {
+            catch(InterruptedException ex) {
                 System.out.println("Worker bee interrupted when running!");
             }
             flowerField.exitField(this);

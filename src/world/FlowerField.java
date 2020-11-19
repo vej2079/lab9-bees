@@ -9,7 +9,7 @@ import bee.Worker;
  * Otherwise the bee must wait until a flower becomes free.
  *
  * @author Sean Strout @ RIT CS
- * @author YOUR NAME HERE
+ * @author Victoria Jones
  */
 public class FlowerField {
     /** the maximum number of workers allowed in the field at the same time */

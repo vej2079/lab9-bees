@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * uses the resources in order to support reproduction.
  *
  * @author Sean Strout @ RIT CS
- * @author YOUR NAME HERE
+ * @author Victoria Jones
  */
 public class BeeHive {
     /** the field of flowers */
@@ -167,12 +167,7 @@ public class BeeHive {
     public void begin() {
         System.out.println("*BH* Bee hive begins buzzing!");
         for (Bee bee : bees) {
-            try {
-                //bee.wait();
-                bee.start();
-            } catch(Exception e){
-		        //RIP
-		    }
+            bee.start();
 		    // System.out.println("Entered field: " + bee.toString());
         }
     }
@@ -195,15 +190,11 @@ public class BeeHive {
      */
     public void end() {
         System.out.println("*BH* Bee hive is becoming inactive!");
-        // flip the switch
         this.active = false;
-        // TODO
         for (Bee bee : bees) {
             try {
                 bee.join();
-                // leave the routine????
                 // System.out.println("Exited field: " + bee.toString());
-                // bee.notify();
             } catch (InterruptedException ie) {
                 System.out.println( "Got interrupted while joining in BeeHive.");
             }
@@ -218,7 +209,7 @@ public class BeeHive {
      *
      * @param bee the bee who perished
      */
-    public synchronized void beePerished (Bee bee){
+    public synchronized void beePerished(Bee bee) {
         this.perishedBees.add(bee);
     }
 
@@ -239,7 +230,7 @@ public class BeeHive {
      *
      * @return do we have enough resources?
      */
-    public synchronized boolean hasResources() {
+    public synchronized boolean hasResources() { // why does this have sync?
          return ((pollen >= 1) && (nectar >= 1));
     }
 
@@ -249,7 +240,7 @@ public class BeeHive {
      *
      * @rit.pre {@link BeeHive#hasResources()} is true
      */
-    public synchronized void claimResources() {
+    public synchronized void claimResources() { // why does this have sync?
         this.pollen--;
         this.nectar--;
     }
@@ -267,7 +258,7 @@ public class BeeHive {
      *
      * @rit.pre the bee hive is still active
      */
-    public synchronized void deposit(Resource resource, Worker bee) {
+    public synchronized void deposit(Resource resource, Worker bee) { // why does this have sync?
         System.out.println("*BH* " + bee + " deposits");
         if (resource == Resource.NECTAR) {
             nectar++;

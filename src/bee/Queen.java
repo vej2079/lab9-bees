@@ -20,7 +20,7 @@ import world.QueensChamber;
  * netflix before she chills with her next drone.
  *
  * @author Sean Strout @ RIT CS
- * @author YOUR NAME HERE
+ * @author Victoria Jones
  */
 public class Queen extends Bee {
     /**
@@ -72,6 +72,7 @@ public class Queen extends Bee {
     public void run() {
         while (this.beeHive.isActive()) {
             if (beeHive.hasResources()) {
+                System.out.println("hasResources()");
                 queensChamber.summonDrone();
                 try {
                     Thread.sleep(MATE_TIME_MS);
@@ -97,17 +98,15 @@ public class Queen extends Bee {
                 }
                 System.out.println("*Q* Queen birthed " + numCreated + " children");
             }
-            // queen sleeps here??
             try {
                 Thread.sleep(SLEEP_TIME_MS);
             }
-            catch( InterruptedException ex ) {
+            catch(InterruptedException ex) {
                 System.out.println("Queen bee interrupted when sleeping!");
             }
-            if (!this.beeHive.isActive()) {
-                // dismiss all drones in chamber??
-                queensChamber.dismissDrone();
-            }
+        }
+        if (!this.beeHive.isActive()) {
+            queensChamber.dismissDrone();
         }
     }
 }

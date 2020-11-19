@@ -10,12 +10,14 @@ import world.QueensChamber;
  * endophallus gets ripped off and he perishes soon after mating.
  *
  * @author Sean Strout @ RIT CS
- * @author YOUR NAME HERE
+ * @author Victoria Jones
  */
 public class Drone extends Bee {
 
+    /** Whether the current instance has mated with the queen or not */
     private boolean mated;
 
+    /** The queen's chamber */
     private QueensChamber chamber;
 
     /**
@@ -59,12 +61,16 @@ public class Drone extends Bee {
                 }
                 beeHive.beePerished(this);
                 System.out.println("*D* " + this.toString() + " has perished!");
-            } else {
-                this.notify(); // end run?
             }
+            // this.notify();
         }
     }
 
+
+    /**
+     * Updates the current instance's mated field
+     * based on whether the bee has mated or not.
+     */
     public void setMated() {
         this.mated = true;
     }
